@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Boletos - Gran Rifa</title>
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --dark: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --accent: #00b894;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border: 1px solid #334155;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Caja de cuentas bancarias */
+    .bank-box {
+      background: #0f172a;
+      border: 1px dashed var(--primary);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .bank-box p {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .copy-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      border: 2px dashed #475569;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #0f172a;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+      background: #00a884;
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .success-msg h2 { color: var(--accent); margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="form-container">
+    <div class="header">
+      <h1>🎟️ Registro de Boleto</h1>
+      <p>Sube tu pago para validar tu participación</p>
+    </div>
+
+    <form id="raffleForm">
+      <!-- Nombre Completo -->
+      <div class="form-group">
+        <label>Nombre y Apellido</label>
+        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+      </div>
+
+      <!-- Teléfono / WhatsApp -->
+      <div class="form-group">
+        <label>Teléfono (WhatsApp)</label>
+        <input type="tel" id="telefono" required placeholder="809-000-0000">
+      </div>
+
+      <!-- Número de Boleto -->
+      <div class="form-group">
+        <label>Número de Boleto Específico</label>
+        <input type="number" id="boleto" required placeholder="Ej: 042">
+      </div>
+
+      <!-- Selección de Banco -->
+      <div class="form-group">
+        <label>Banco al que realizaste la transferencia</label>
+        <select id="banco" required onchange="mostrarCuenta()">
+          <option value="">-- Selecciona un Banco --</option>
+          <option value="banreservas">Banreservas</option>
+          <option value="bhd">Banco BHD</option>
+          <option value="popular">Banco Popular</option>
+        </select>
+
+        <!-- Información de las cuentas -->
+        <div id="info-banreservas" class="bank-box">
+          <p><strong>Titular:</strong> Rolando Matos</p>
+          <p><strong>Cuenta Ahorros:</strong> <span id="num-banreservas">9600000001</span></p>
+          <button type="button" class="copy-btn" onclick="copiar('num-banreservas')">Copiar Cuenta</button>
+        </div>
+
+        <div id="info-bhd" class="bank-box">
+          <p><strong>Titular:</strong> Rolando Matos</p>
+          <p><strong>Cuenta Ahorros:</strong> <span id="num-bhd">1234567890</span></p>
+          <button type="button" class="copy-btn" onclick="copiar('num-bhd')">Copiar Cuenta</button>
+        </div>
+
+        <div id="info-popular" class="bank-box">
+          <p><strong>Titular:</strong> Rolando Matos</p>
+          <p><strong>Cuenta Ahorros:</strong> <span id="num-popular">7890123456</span></p>
+          <button type="button" class="copy-btn" onclick="copiar('num-popular')">Copiar Cuenta</button>
+        </div>
+      </div>
+
+      <!-- Subir Comprobante -->
+      <div class="form-group">
+        <label>Subir Comprobante (Voucher/Foto)</label>
+        <div class="file-input-wrapper">
+          <span id="file-label">📸 Toca aquí para adjuntar o tomar foto</span>
+          <input type="file" id="voucher" accept="image/*,.pdf" required onchange="actualizarArchivo(this)">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">Enviar y Validar Boleto</button>
+    </form>
+  </div>
+
+  <div id="success-message" class="success-msg">
+    <h2>🎉 ¡Recibido con éxito!</h2>
+    <p>Gracias por registrarte. Estamos verificando tu pago. En breve recibirás la confirmación a tu WhatsApp.</p>
+  </div>
+</div>
+
+<script>
+  function mostrarCuenta() {
+    const banco = document.getElementById('banco').value;
+    document.querySelectorAll('.bank-box').forEach(box => box.style.display = 'none');
+    if (banco) {
+      const box = document.getElementById('info-' + banco);
+      if(box) box.style.display = 'block';
+    }
+  }
+
+  function copiar(idElemento) {
+    const texto = document.getElementById(idElemento).innerText;
+    navigator.clipboard.writeText(texto);
+    alert('Número de cuenta copiado: ' + texto);
+  }
+
+  function actualizarArchivo(input) {
+    const label = document.getElementById('file-label');
+    if (input.files && input.files[0]) {
+      label.innerText = "📄 " + input.files[0].name;
+    }
+  }
+
+  document.getElementById('raffleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Oculta el formulario y muestra la confirmación
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('success-message').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
