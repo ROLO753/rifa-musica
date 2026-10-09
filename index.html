@@ -769,7 +769,229 @@
     document.getElementById('form-container').style.display = 'none';
     document.getElementById('success-message').style.display = 'block';
   });
-</script>
+</script><script>
+  // 1. PEGA AQUÍ LA URL QUE TE DIO GOOGLE APPS SCRIPT:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6K3SQLIln1PN7o_zCvMlafILOk_qJ3TbgZqZhmjmmQpdOpKRKawiwP56vhe3dpSvtBg/exec";
 
-</body>
-</html>
+  const PRECIO_UNITARIO = 50;
+  const META_ESTIMADA_BOLETOS = 500;
+
+  function actualizarProgreso() {
+    let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
+    let totalVendidos = 0;
+    registros.forEach(r => totalVendidos += r.boletos.length);
+
+    let porcentaje = Math.min(Math.round((totalVendidos / META_ESTIMADA_BOLETOS) * 100), 100);
+
+    let elemVendidos = document.getElementById('boletos-jugados');
+    let elemPct = document.getElementById('porcentaje-texto');
+    let elemBar = document.getElementById('progress-bar-fill');
+    let elemUrgency = document.getElementById('urgency-bar');
+
+    if(elemVendidos) elemVendidos.innerText = totalVendidos;
+    if(elemPct) elemPct.innerText = porcentaje + '%';
+    if(elemBar) elemBar.style.width = porcentaje + '%';
+
+    if (elemUrgency) {
+      if (porcentaje >= 95) {
+        elemUrgency.style.display = 'block';
+      } else {
+        elemUrgency.style.display = 'none';
+      }
+    }
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    if(tab === 'comprar') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('tab-comprar').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('tab-verificar').classList.add('active');
+    }
+  }
+
+  function calcularTotal(cantidad) {
+    const total = cantidad * PRECIO_UNITARIO;
+    document.getElementById('monto-total').innerText = 'RD$ ' + total.toLocaleString();
+  }
+
+  function selectPackage(card, cantidad) {
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('custom-qty').value = cantidad;
+    calcularTotal(cantidad);
+  }
+
+  function cambiarCantidad(delta) {
+    let input = document.getElementById('custom-qty');
+    let val = parseInt(input.value) + delta;
+    if(val < 2) val = 2;
+    input.value = val;
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+    calcularTotal(val);
+  }
+
+  function actualizarDesdeInput() {
+    let input = document.getElementById('custom-qty');
+    let val = parseInt(input.value);
+    if (isNaN(val) || val < 2) val = 2;
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+    calcularTotal(val);
+  }
+
+  function mostrarCuenta() {
+    const banco = document.getElementById('banco').value;
+    document.querySelectorAll('.bank-box').forEach(box => box.style.display = 'none');
+    if (banco) {
+      const box = document.getElementById('info-' + banco);
+      if(box) box.style.display = 'block';
+    }
+  }
+
+  function copiar(id) {
+    const texto = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(texto);
+    alert('Número de cuenta copiado: ' + texto);
+  }
+
+  function actualizarArchivo(input) {
+    const label = document.getElementById('file-label');
+    if (input.files && input.files[0]) {
+      label.innerText = "📄 " + input.files[0].name;
+    }
+  }
+
+  // Genera combinaciones únicas de 5 dígitos
+  function generarNumerosPick4(cantidad) {
+    let numeros = [];
+    while(numeros.length < cantidad) {
+      let num = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+      if(!numeros.includes(num)) {
+        numeros.push(num);
+      }
+    }
+    return numeros;
+  }
+
+  // FUNCIÓN DEL PASO 2: Envía los datos y la foto a tu Google Sheets
+  function guardarRegistro(nombre, telefono, boletos, banco, fileInput) {
+    const file = fileInput.files[0];
+    if (!file) {
+      alert("Por favor adjunta la foto de tu comprobante/voucher.");
+      return;
+    }
+
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      const payload = {
+        action: "registrar",
+        nombre: nombre,
+        telefono: telefono,
+        boletos: boletos,
+        banco: banco,
+        fileName: file.name,
+        fileData: e.target.result
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Registrado con éxito en Google Sheets:", data);
+      })
+      .catch(err => console.error("Error guardando registro:", err));
+    };
+
+    reader.readAsDataURL(file);
+
+    // Guardar copia local para consultas
+    let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
+    registros.push({
+      nombre: nombre,
+      telefono: telefono.replace(/[^0-9]/g, ''),
+      boletos: boletos,
+      banco: banco,
+      estado: 'PENDIENTE DE VERIFICACIÓN',
+      fecha: new Date().toLocaleDateString()
+    });
+    localStorage.setItem('boletos_rifa', JSON.stringify(registros));
+    actualizarProgreso();
+  }
+
+  function buscarBoleto() {
+    const query = document.getElementById('query-busqueda').value.trim().replace(/[^0-9]/g, '');
+    const resBox = document.getElementById('verify-result');
+    resBox.style.display = 'block';
+
+    if(!query) {
+      resBox.innerHTML = '<p style="color: var(--accent-red);">Por favor ingresa un número de teléfono o número de boleto válido.</p>';
+      return;
+    }
+
+    let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
+    let encontrados = registros.filter(r => r.telefono.includes(query) || r.boletos.includes(query));
+
+    if(encontrados.length === 0) {
+      resBox.innerHTML = `<p style="color: var(--accent-red); font-weight: bold;">❌ No se encontraron boletos registrados con: "${query}"</p>`;
+    } else {
+      let html = '';
+      encontrados.forEach(item => {
+        html += `
+          <div style="border-bottom: 1px solid #1f293d; padding-bottom: 10px; margin-bottom: 10px;">
+            <p>👤 <strong>Cliente:</strong> ${item.nombre}</p>
+            <p>📱 <strong>WhatsApp:</strong> ${item.telefono}</p>
+            <p>🎟️ <strong>Boletos:</strong> <span style="color: var(--accent-gold); font-weight: bold;">${item.boletos.join(', ')}</span></p>
+            <p>🏛️ <strong>Banco:</strong> ${item.banco.toUpperCase()}</p>
+            <span class="status-badge status-pending">⏳ ${item.estado}</span>
+          </div>
+        `;
+      });
+      resBox.innerHTML = html;
+    }
+  }
+
+  // Timer regresivo
+  let timeLeft = 600;
+  setInterval(() => {
+    if(timeLeft > 0) {
+      timeLeft--;
+      let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      let s = (timeLeft % 60).toString().padStart(2, '0');
+      let elemTimer = document.getElementById('timer');
+      if(elemTimer) elemTimer.innerText = `${m}:${s}`;
+    }
+  }, 1000);
+
+  actualizarProgreso();
+
+  // Escuchador al enviar el formulario
+  document.getElementById('raffleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let cantidad = parseInt(document.getElementById('custom-qty').value);
+    if(isNaN(cantidad) || cantidad < 2) cantidad = 2;
+
+    const nombre = document.getElementById('nombre').value;
+    const telefono = document.getElementById('telefono').value;
+    const banco = document.getElementById('banco').value;
+    const fileInput = document.getElementById('voucher');
+
+    const boletosGenerados = generarNumerosPick4(cantidad);
+
+    // Muestra los boletos al cliente en pantalla
+    document.getElementById('generated-tickets').innerText = boletosGenerados.join(' - ');
+
+    // Envía a Google Sheets y Drive
+    guardarRegistro(nombre, telefono, boletosGenerados, banco, fileInput);
+
+    // Muestra la pantalla de éxito
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('success-message').style.display = 'block';
+  });
+</script>
