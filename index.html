@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gran Rifa - Selección de Paquete</title>
+  <title>🔥 GRAN RIFA OFICIAL - ¡GANA YA!</title>
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --card-bg: #131b2e;
-      --text: #ffffff;
-      --text-sub: #8e9aaf;
-      --accent-green: #00ff87;
-      --accent-yellow: #ffcc00;
-      --accent-cyan: #00d2ff;
-      --accent-purple: #9d4edd;
+      --bg-dark: #070a12;
+      --card-bg: #111827;
+      --accent-gold: #ffb703;
+      --accent-green: #00e676;
+      --accent-cyan: #00f0ff;
       --accent-red: #ff0055;
+      --text: #ffffff;
+      --text-sub: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -26,176 +25,295 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 15px;
+      padding: 12px;
+      background-image: radial-gradient(circle at top, #1e1b4b 0%, #070a12 70%);
     }
 
     .container {
       width: 100%;
-      max-width: 700px;
-      background: #0f172a;
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      border: 1px solid #1e293b;
+      max-width: 650px;
+      background: rgba(17, 24, 39, 0.95);
+      border-radius: 24px;
+      padding: 24px 18px;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.2);
+      border: 1px solid #1f293d;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Pestañas de Navegación */
+    .tabs-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #070a12;
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid #1f293d;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      font-weight: bold;
+      font-size: 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      box-shadow: 0 0 10px rgba(255, 183, 3, 0.4);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Urgencia */
+    .urgency-bar {
+      background: linear-gradient(90deg, #ff0055, #ffb703);
+      color: #000;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      padding: 6px;
+      border-radius: 30px;
+      text-align: center;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
+      100% { box-shadow: 0 0 20px rgba(255, 183, 3, 0.8); }
     }
 
     .header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .header h1 {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-      background: linear-gradient(90deg, #fff, var(--text-sub));
+      background: linear-gradient(180deg, #ffffff 0%, var(--accent-gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
     }
 
     .header p {
-      font-size: 0.9rem;
-      color: var(--text-sub);
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .price-tag {
+      display: inline-block;
+      background: rgba(0, 230, 118, 0.15);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      margin-top: 6px;
     }
 
     /* Grid de Paquetes */
     .packages-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
     .pkg-card {
       background: var(--card-bg);
-      border: 2px solid #1e293b;
-      border-radius: 14px;
-      padding: 15px 10px;
+      border: 2px solid #1f293d;
+      border-radius: 16px;
+      padding: 12px 6px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       position: relative;
     }
 
-    .pkg-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .pkg-card.selected {
-      border-color: var(--accent-green);
-      box-shadow: 0 0 15px rgba(0, 255, 135, 0.3);
-      background: #17233d;
+    .pkg-card:hover, .pkg-card.selected {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
+      transform: translateY(-4px);
+      background: #182238;
     }
 
     .pkg-title {
-      font-size: 0.75rem;
-      font-weight: bold;
+      font-size: 0.7rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
       color: var(--text-sub);
     }
 
     .pkg-numbers {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 900;
       color: #fff;
-      line-height: 1;
+      line-height: 1.1;
     }
 
     .pkg-sub {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: var(--text-sub);
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .pkg-price {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: bold;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 5px;
-      border-radius: 6px;
-      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 8px;
+      color: var(--accent-gold);
     }
 
     .badge {
       position: absolute;
-      top: -10px;
+      top: -8px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.6rem;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 10px;
+      font-size: 0.55rem;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 8px;
       text-transform: uppercase;
     }
 
-    .badge-popular { background: var(--accent-yellow); color: #000; }
-    .badge-vip { background: var(--accent-purple); color: #fff; }
-    .badge-max { background: var(--accent-red); color: #fff; }
-
-    /* Estilos del Formulario */
-    .form-group {
-      margin-bottom: 18px;
+    /* Selector de Cantidad Personalizada */
+    .custom-qty-box {
+      background: #141e33;
+      border: 1px solid #2d3e5e;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 20px;
     }
+
+    .custom-qty-box label {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      font-weight: bold;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .qty-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-qty {
+      background: var(--accent-gold);
+      color: #000;
+      border: none;
+      width: 36px;
+      height: 36px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .input-qty {
+      width: 90px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      background: #070a12;
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 6px;
+    }
+
+    .total-display {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+    .total-display span {
+      color: var(--accent-green);
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    /* Formulario */
+    .form-group { margin-bottom: 14px; }
 
     label {
       display: block;
-      font-size: 0.85rem;
-      margin-bottom: 6px;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
       color: var(--text-sub);
       font-weight: 600;
     }
 
     input, select {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       border-radius: 10px;
-      border: 1px solid #334155;
-      background: #0b0f19;
+      border: 1px solid #2d3e5e;
+      background: #070a12;
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
     }
 
     input:focus, select:focus {
-      border-color: var(--accent-green);
+      border-color: var(--accent-gold);
     }
 
-    /* Caja Cuentas Bancarias */
     .bank-box {
-      background: #0b0f19;
-      border: 1px dashed var(--accent-green);
-      padding: 12px;
+      background: #070a12;
+      border: 1px dashed var(--accent-gold);
+      padding: 10px;
       border-radius: 10px;
-      margin-top: 8px;
+      margin-top: 6px;
       display: none;
     }
 
-    .bank-box p { font-size: 0.85rem; margin-bottom: 4px; }
+    .bank-box p { font-size: 0.8rem; margin-bottom: 3px; }
 
     .copy-btn {
-      background: var(--accent-green);
+      background: var(--accent-gold);
       color: #000;
       font-weight: bold;
       border: none;
-      padding: 6px 12px;
-      font-size: 0.75rem;
+      padding: 5px 10px;
+      font-size: 0.7rem;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     .file-wrapper {
       position: relative;
-      border: 2px dashed #334155;
-      padding: 20px;
+      border: 2px dashed #2d3e5e;
+      padding: 15px;
       text-align: center;
       border-radius: 10px;
       cursor: pointer;
-      background: #0b0f19;
+      background: #070a12;
     }
 
     .file-wrapper input[type="file"] {
@@ -207,169 +325,266 @@
 
     .btn-submit {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(90deg, #00ff87, #60efff);
+      padding: 14px;
+      background: linear-gradient(90deg, var(--accent-gold), #ff8800);
       color: #000;
       font-weight: 900;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 1.1rem;
       text-transform: uppercase;
       cursor: pointer;
-      margin-top: 15px;
-      transition: transform 0.2s;
+      margin-top: 10px;
+      box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
     }
 
-    .btn-submit:hover {
-      transform: scale(1.02);
+    .btn-search {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
     }
 
     .success-msg {
       display: none;
       text-align: center;
-      padding: 20px;
+      padding: 15px;
     }
 
-    .success-msg h2 { color: var(--accent-green); margin-bottom: 10px; }
     .ticket-list {
-      background: #0b0f19;
-      padding: 15px;
+      background: #070a12;
+      padding: 12px;
       border-radius: 10px;
-      margin: 15px 0;
-      font-size: 1.2rem;
+      margin: 12px 0;
+      font-size: 1.1rem;
       font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--accent-yellow);
+      letter-spacing: 1px;
+      color: var(--accent-gold);
+      word-break: break-all;
     }
+
+    /* Caja de resultado de verificación */
+    .verify-result {
+      margin-top: 15px;
+      padding: 15px;
+      background: #070a12;
+      border-radius: 12px;
+      border: 1px solid #2d3e5e;
+      display: none;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .status-pending { background: rgba(255, 183, 3, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .status-approved { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="form-container">
-    <div class="header">
-      <h1>🎟️ Selecciona tu Paquete</h1>
-      <p>A mayor cantidad de números, más oportunidades de ganar</p>
-    </div>
-
-    <!-- Opciones de Paquetes (Estilo Imagen) -->
-    <div class="packages-grid">
-      <div class="pkg-card" onclick="selectPackage(this, 2, 200)">
-        <div class="pkg-title">Rookie</div>
-        <div class="pkg-numbers">2</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 200</div>
-      </div>
-
-      <div class="pkg-card" onclick="selectPackage(this, 5, 500)">
-        <div class="pkg-title" style="color: var(--accent-green);">Amateur</div>
-        <div class="pkg-numbers" style="color: var(--accent-green);">5</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 500</div>
-      </div>
-
-      <div class="pkg-card selected" onclick="selectPackage(this, 10, 1000)">
-        <span class="badge badge-popular">★ Popular</span>
-        <div class="pkg-title" style="color: var(--accent-yellow);">Pro</div>
-        <div class="pkg-numbers" style="color: var(--accent-yellow);">10</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 1,000</div>
-      </div>
-
-      <div class="pkg-card" onclick="selectPackage(this, 15, 1500)">
-        <div class="pkg-title" style="color: var(--accent-cyan);">Elite</div>
-        <div class="pkg-numbers" style="color: var(--accent-cyan);">15</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 1,500</div>
-      </div>
-
-      <div class="pkg-card" onclick="selectPackage(this, 25, 2500)">
-        <div class="pkg-title" style="color: #a29bfe;">Campeón</div>
-        <div class="pkg-numbers" style="color: #a29bfe;">25</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 2,500</div>
-      </div>
-
-      <div class="pkg-card" onclick="selectPackage(this, 50, 5000)">
-        <span class="badge badge-vip">★ VIP</span>
-        <div class="pkg-title" style="color: var(--accent-purple);">Leyenda</div>
-        <div class="pkg-numbers" style="color: var(--accent-purple);">50</div>
-        <div class="pkg-sub">Números</div>
-        <div class="pkg-price">RD$ 5,000</div>
-      </div>
-    </div>
-
-    <form id="raffleForm">
-      <input type="hidden" id="cant_boletos" value="10">
-      <input type="hidden" id="monto_total" value="1000">
-
-      <!-- Datos Personales -->
-      <div class="form-group">
-        <label>Nombre y Apellido</label>
-        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
-      </div>
-
-      <div class="form-group">
-        <label>Teléfono (WhatsApp)</label>
-        <input type="tel" id="telefono" required placeholder="809-000-0000">
-      </div>
-
-      <!-- Métodos de Pago -->
-      <div class="form-group">
-        <label>Banco al que realizaste la transferencia</label>
-        <select id="banco" required onchange="mostrarCuenta()">
-          <option value="">-- Selecciona un Banco --</option>
-          <option value="banreservas">Banreservas</option>
-          <option value="bhd">Banco BHD</option>
-          <option value="popular">Banco Popular</option>
-        </select>
-
-        <div id="info-banreservas" class="bank-box">
-          <p><strong>Titular:</strong> Rolando Matos</p>
-          <p><strong>Cuenta Ahorros:</strong> <span id="num-banreservas">9600000001</span></p>
-          <button type="button" class="copy-btn" onclick="copiar('num-banreservas')">Copiar Cuenta</button>
-        </div>
-
-        <div id="info-bhd" class="bank-box">
-          <p><strong>Titular:</strong> Rolando Matos</p>
-          <p><strong>Cuenta Ahorros:</strong> <span id="num-bhd">1234567890</span></p>
-          <button type="button" class="copy-btn" onclick="copiar('num-bhd')">Copiar Cuenta</button>
-        </div>
-
-        <div id="info-popular" class="bank-box">
-          <p><strong>Titular:</strong> Rolando Matos</p>
-          <p><strong>Cuenta Ahorros:</strong> <span id="num-popular">7890123456</span></p>
-          <button type="button" class="copy-btn" onclick="copiar('num-popular')">Copiar Cuenta</button>
-        </div>
-      </div>
-
-      <!-- Subir Comprobante -->
-      <div class="form-group">
-        <label>Subir Comprobante (Voucher / Captura)</label>
-        <div class="file-wrapper">
-          <span id="file-label">📸 Toca para adjuntar o tomar foto del voucher</span>
-          <input type="file" id="voucher" accept="image/*,.pdf" required onchange="actualizarArchivo(this)">
-        </div>
-      </div>
-
-      <button type="submit" class="btn-submit">Confirmar y Registrar Boletos</button>
-    </form>
+  <!-- Pestañas arriba -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('comprar')">🎟️ Comprar Boletos</button>
+    <button class="tab-btn" onclick="switchTab('verificar')">🔍 Consultar Mi Boleto</button>
   </div>
 
-  <div id="success-message" class="success-msg">
-    <h2>🎉 ¡Registro Recibido!</h2>
-    <p>Tus números asignados de 5 dígitos para la rifa son:</p>
-    <div id="generated-tickets" class="ticket-list"></div>
-    <p style="color: var(--text-sub); font-size: 0.9rem;">Estamos verificando tu pago con el banco. Una vez validado, te confirmaremos formalmente a tu WhatsApp.</p>
+  <!-- PESTAÑA 1: COMPRAR BOLETOS -->
+  <div id="tab-comprar" class="tab-content active">
+    <div id="form-container">
+      <div class="urgency-bar">
+        🔥 ¡Quedan pocos boletos disponibles! Tiempo de reserva: <span id="timer">09:59</span>
+      </div>
+
+      <div class="header">
+        <h1>🎟️ Elige tus Boletos</h1>
+        <p>Selecciona tu paquete o elige tu cantidad personalizada</p>
+        <div class="price-tag">Precio por boleto: RD$ 50</div>
+      </div>
+
+      <!-- Grid de Paquetes -->
+      <div class="packages-grid">
+        <div class="pkg-card" onclick="selectPackage(this, 2)">
+          <div class="pkg-title">Básico</div>
+          <div class="pkg-numbers">2</div>
+          <div class="pkg-sub">Boletos</div>
+          <div class="pkg-price">RD$ 100</div>
+        </div>
+
+        <div class="pkg-card" onclick="selectPackage(this, 5)">
+          <div class="pkg-title" style="color: var(--accent-green);">Starter</div>
+          <div class="pkg-numbers" style="color: var(--accent-green);">5</div>
+          <div class="pkg-sub">Boletos</div>
+          <div class="pkg-price">RD$ 250</div>
+        </div>
+
+        <div class="pkg-card selected" onclick="selectPackage(this, 10)">
+          <span class="badge" style="background: var(--accent-gold); color: #000;">★ Popular</span>
+          <div class="pkg-title" style="color: var(--accent-gold);">Pro</div>
+          <div class="pkg-numbers" style="color: var(--accent-gold);">10</div>
+          <div class="pkg-sub">Boletos</div>
+          <div class="pkg-price">RD$ 500</div>
+        </div>
+
+        <div class="pkg-card" onclick="selectPackage(this, 20)">
+          <div class="pkg-title" style="color: var(--accent-cyan);">Super</div>
+          <div class="pkg-numbers" style="color: var(--accent-cyan);">20</div>
+          <div class="pkg-sub">Boletos</div>
+          <div class="pkg-price">RD$ 1,000</div>
+        </div>
+
+        <div class="pkg-card" onclick="selectPackage(this, 50)">
+          <span class="badge" style="background: var(--accent-red); color: #fff;">🔥 Máximo</span>
+          <div class="pkg-title" style="color: var(--accent-red);">Leyenda</div>
+          <div class="pkg-numbers" style="color: var(--accent-red);">50</div>
+          <div class="pkg-sub">Boletos</div>
+          <div class="pkg-price">RD$ 2,500</div>
+        </div>
+      </div>
+
+      <!-- Cantidad Personalizada -->
+      <div class="custom-qty-box">
+        <label>⚡ O escribe tu cantidad personalizada (mínimo 2)</label>
+        <div class="qty-controls">
+          <button type="button" class="btn-qty" onclick="cambiarCantidad(-1)">-</button>
+          <input type="number" id="custom-qty" class="input-qty" value="10" min="2" oninput="actualizarDesdeInput()">
+          <button type="button" class="btn-qty" onclick="cambiarCantidad(1)">+</button>
+        </div>
+        <div class="total-display">Total a pagar: <span id="monto-total">RD$ 500</span></div>
+      </div>
+
+      <form id="raffleForm">
+        <div class="form-group">
+          <label>Nombre y Apellido</label>
+          <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono (WhatsApp)</label>
+          <input type="tel" id="telefono" required placeholder="8090000000">
+        </div>
+
+        <div class="form-group">
+          <label>Banco al que realizaste la transferencia</label>
+          <select id="banco" required onchange="mostrarCuenta()">
+            <option value="">-- Selecciona un Banco --</option>
+            <option value="banreservas">Banreservas</option>
+            <option value="bhd">Banco BHD</option>
+            <option value="popular">Banco Popular</option>
+          </select>
+
+          <div id="info-banreservas" class="bank-box">
+            <p><strong>Titular:</strong> Rolando Matos</p>
+            <p><strong>Cuenta Ahorros:</strong> <span id="num-banreservas">9600000001</span></p>
+            <button type="button" class="copy-btn" onclick="copiar('num-banreservas')">Copiar Cuenta</button>
+          </div>
+
+          <div id="info-bhd" class="bank-box">
+            <p><strong>Titular:</strong> Rolando Matos</p>
+            <p><strong>Cuenta Ahorros:</strong> <span id="num-bhd">1234567890</span></p>
+            <button type="button" class="copy-btn" onclick="copiar('num-bhd')">Copiar Cuenta</button>
+          </div>
+
+          <div id="info-popular" class="bank-box">
+            <p><strong>Titular:</strong> Rolando Matos</p>
+            <p><strong>Cuenta Ahorros:</strong> <span id="num-popular">7890123456</span></p>
+            <button type="button" class="copy-btn" onclick="copiar('num-popular')">Copiar Cuenta</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Subir Comprobante (Voucher / Captura)</label>
+          <div class="file-wrapper">
+            <span id="file-label">📸 Toca aquí para adjuntar foto del voucher</span>
+            <input type="file" id="voucher" accept="image/*,.pdf" required onchange="actualizarArchivo(this)">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">🔥 ¡COMPRAR Y RESERVAR MIS BOLETOS!</button>
+      </form>
+    </div>
+
+    <div id="success-message" class="success-msg">
+      <h2>🎉 ¡Tus números están reservados!</h2>
+      <p>Tus combinaciones asignadas de 5 dígitos son:</p>
+      <div id="generated-tickets" class="ticket-list"></div>
+      <p style="color: var(--text-sub); font-size: 0.85rem;">Puedes consultar el estado de tu boleto con tu teléfono en la pestaña "Consultar Mi Boleto".</p>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 2: CONSULTAR / VERIFICAR BOLETO -->
+  <div id="tab-verificar" class="tab-content">
+    <div class="header">
+      <h1>🔍 Consulta de Boletos</h1>
+      <p>Ingresa tu número de teléfono (WhatsApp) o el código de tu boleto</p>
+    </div>
+
+    <div class="form-group">
+      <label>Buscar por Teléfono o Nº de Boleto (5 dígitos)</label>
+      <input type="text" id="query-busqueda" placeholder="Ej: 8090000000 o 48291">
+      <button class="btn-search" onclick="buscarBoleto()">Buscar Mis Boletos</button>
+    </div>
+
+    <div id="verify-result" class="verify-result"></div>
   </div>
 </div>
 
 <script>
-  function selectPackage(card, cantidad, precio) {
+  const PRECIO_UNITARIO = 50;
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    if(tab === 'comprar') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('tab-comprar').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('tab-verificar').classList.add('active');
+    }
+  }
+
+  function calcularTotal(cantidad) {
+    const total = cantidad * PRECIO_UNITARIO;
+    document.getElementById('monto-total').innerText = 'RD$ ' + total.toLocaleString();
+  }
+
+  function selectPackage(card, cantidad) {
     document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    document.getElementById('cant_boletos').value = cantidad;
-    document.getElementById('monto_total').value = precio;
+    document.getElementById('custom-qty').value = cantidad;
+    calcularTotal(cantidad);
+  }
+
+  function cambiarCantidad(delta) {
+    let input = document.getElementById('custom-qty');
+    let val = parseInt(input.value) + delta;
+    if(val < 2) val = 2;
+    input.value = val;
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+    calcularTotal(val);
+  }
+
+  function actualizarDesdeInput() {
+    let input = document.getElementById('custom-qty');
+    let val = parseInt(input.value);
+    if (isNaN(val) || val < 2) val = 2;
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+    calcularTotal(val);
   }
 
   function mostrarCuenta() {
@@ -394,7 +609,6 @@
     }
   }
 
-  // Genera números aleatorios únicos de 5 dígitos (ej: 04821, 91204)
   function generarNumeros5Digitos(cantidad) {
     let numeros = [];
     while(numeros.length < cantidad) {
@@ -406,15 +620,80 @@
     return numeros;
   }
 
+  // Guardar en el almacenamiento local para consultas
+  function guardarRegistro(nombre, telefono, boletos, banco) {
+    let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
+    registros.push({
+      nombre: nombre,
+      telefono: telefono.replace(/[^0-9]/g, ''),
+      boletos: boletos,
+      banco: banco,
+      estado: 'PENDIENTE DE VERIFICACIÓN',
+      fecha: new Date().toLocaleDateString()
+    });
+    localStorage.setItem('boletos_rifa', JSON.stringify(registros));
+  }
+
+  // Buscar boleto por teléfono o número de 5 dígitos
+  function buscarBoleto() {
+    const query = document.getElementById('query-busqueda').value.trim().replace(/[^0-9]/g, '');
+    const resBox = document.getElementById('verify-result');
+    resBox.style.display = 'block';
+
+    if(!query) {
+      resBox.innerHTML = '<p style="color: var(--accent-red);">Por favor ingresa un número de teléfono o número de boleto válido.</p>';
+      return;
+    }
+
+    let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
+    let encontrados = registros.filter(r => r.telefono.includes(query) || r.boletos.includes(query));
+
+    if(encontrados.length === 0) {
+      resBox.innerHTML = `
+        <p style="color: var(--accent-red); font-weight: bold;">❌ No se encontraron boletos registrados con: "${query}"</p>
+        <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 5px;">Si recién enviaste tu comprobante, intenta nuevamente en unos minutos.</p>
+      `;
+    } else {
+      let html = '';
+      encontrados.forEach(item => {
+        html += `
+          <div style="border-bottom: 1px solid #1f293d; padding-bottom: 10px; margin-bottom: 10px;">
+            <p>👤 <strong>Cliente:</strong> ${item.nombre}</p>
+            <p>📱 <strong>WhatsApp:</strong> ${item.telefono}</p>
+            <p>🎟️ <strong>Boletos:</strong> <span style="color: var(--accent-gold); font-weight: bold;">${item.boletos.join(', ')}</span></p>
+            <p>🏛️ <strong>Banco:</strong> ${item.banco.toUpperCase()}</p>
+            <span class="status-badge status-pending">⏳ ${item.estado}</span>
+          </div>
+        `;
+      });
+      resBox.innerHTML = html;
+    }
+  }
+
+  // Timer regresivo
+  let timeLeft = 600;
+  setInterval(() => {
+    if(timeLeft > 0) {
+      timeLeft--;
+      let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      let s = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timer').innerText = `${m}:${s}`;
+    }
+  }, 1000);
+
   document.getElementById('raffleForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    const cantidad = parseInt(document.getElementById('cant_boletos').value);
+    let cantidad = parseInt(document.getElementById('custom-qty').value);
+    if(isNaN(cantidad) || cantidad < 2) cantidad = 2;
+
+    const nombre = document.getElementById('nombre').value;
+    const telefono = document.getElementById('telefono').value;
+    const banco = document.getElementById('banco').value;
+
     const boletosGenerados = generarNumeros5Digitos(cantidad);
+    guardarRegistro(nombre, telefono, boletosGenerados, banco);
 
-    // Muestra los números generados en pantalla
     document.getElementById('generated-tickets').innerText = boletosGenerados.join(' - ');
-
     document.getElementById('form-container').style.display = 'none';
     document.getElementById('success-message').style.display = 'block';
   });
