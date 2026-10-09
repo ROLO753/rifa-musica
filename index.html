@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔥 GRAN RIFA OFICIAL - ¡GANA YA!</title>
+  <title>🔥 GRAN RIFA OFICIAL - FLORIDA NOCHE</title>
   <style>
     :root {
       --bg-dark: #070a12;
@@ -74,7 +74,7 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Barra de Urgencia al 95% (Oculta por defecto) */
+    /* Barra Alerta al 95% */
     .urgency-bar {
       background: linear-gradient(90deg, #ff0055, #ffb703);
       color: #000;
@@ -86,7 +86,7 @@
       text-align: center;
       letter-spacing: 1px;
       margin-bottom: 15px;
-      display: none; /* Se activa dinámicamente */
+      display: none;
       animation: pulse 1.5s infinite alternate;
     }
 
@@ -243,7 +243,6 @@
       text-transform: uppercase;
     }
 
-    /* Cantidad Personalizada */
     .custom-qty-box {
       background: #141e33;
       border: 1px solid #2d3e5e;
@@ -409,9 +408,9 @@
       padding: 12px;
       border-radius: 10px;
       margin: 12px 0;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       color: var(--accent-gold);
       word-break: break-all;
     }
@@ -448,27 +447,27 @@
 
   <div id="tab-comprar" class="tab-content active">
     <div id="form-container">
-      <!-- Barra Alerta solo al llegar al 95% -->
+      <!-- Alerta de 95% -->
       <div id="urgency-bar" class="urgency-bar">
-        🔥 ¡ATENCIÓN! Nos queda menos del 5% de boletos. Tiempo de reserva: <span id="timer">09:59</span>
+        🔥 ¡ALERTA! Queda menos del 5% de boletos disponibles. Tiempo de reserva: <span id="timer">09:59</span>
       </div>
 
       <div class="header">
-        <h1>🎟️ Gran Rifa de Pasola Eléctrica</h1>
-        <p>¡Gana tu pasola con solo RD$ 50 pesos por boleto!</p>
+        <h1>🎟️ Gran Rifa Oficial</h1>
+        <p>Juega tus números preferidos de 4 dígitos • Sorteo Florida Noche (Pick 4)</p>
         <div class="price-tag">Precio por boleto: RD$ 50</div>
       </div>
 
-      <!-- Barra de Progreso % -->
+      <!-- Progreso % -->
       <div class="progress-section">
         <div class="progress-info">
-          <div>Boletos Vendidos: <span id="porcentaje-texto">0%</span></div>
-          <div><span id="boletos-jugados">0</span> / <span id="boletos-totales">1000</span></div>
+          <div>Progreso del Sorteo: <span id="porcentaje-texto">0%</span></div>
+          <div>Vendidos: <span id="boletos-jugados">0</span></div>
         </div>
         <div class="progress-bar-bg">
           <div id="progress-bar-fill" class="progress-bar-fill"></div>
         </div>
-        <div class="progress-text">¡Sube tu voucher antes de que se agoten!</div>
+        <div class="progress-text">¡Sube tu voucher para asegurar tus números!</div>
       </div>
 
       <!-- Grid de Paquetes -->
@@ -574,7 +573,7 @@
 
     <div id="success-message" class="success-msg">
       <h2>🎉 ¡Tus números están reservados!</h2>
-      <p>Tus combinaciones asignadas de 5 dígitos son:</p>
+      <p>Tus combinaciones asignadas de 4 dígitos para Florida Noche son:</p>
       <div id="generated-tickets" class="ticket-list"></div>
       <p style="color: var(--text-sub); font-size: 0.85rem;">Puedes consultar el estado de tu boleto con tu teléfono en la pestaña "Consultar Mi Boleto".</p>
     </div>
@@ -583,12 +582,12 @@
   <div id="tab-verificar" class="tab-content">
     <div class="header">
       <h1>🔍 Consulta de Boletos</h1>
-      <p>Ingresa tu número de teléfono (WhatsApp) o el código de tu boleto</p>
+      <p>Ingresa tu teléfono o número de boleto (4 dígitos)</p>
     </div>
 
     <div class="form-group">
-      <label>Buscar por Teléfono o Nº de Boleto (5 dígitos)</label>
-      <input type="text" id="query-busqueda" placeholder="Ej: 8090000000 o 48291">
+      <label>Buscar por Teléfono o Nº de Boleto (4 dígitos)</label>
+      <input type="text" id="query-busqueda" placeholder="Ej: 8090000000 o 0482">
       <button class="btn-search" onclick="buscarBoleto()">Buscar Mis Boletos</button>
     </div>
 
@@ -598,22 +597,19 @@
 
 <script>
   const PRECIO_UNITARIO = 50;
-  const TOTAL_BOLETOS_RIFA = 1000; // Puedes cambiar el total de boletos de la rifa aquí
+  const META_ESTIMADA_BOLETOS = 500; // Define la meta estimada para el calculo del %
 
-  // Cargar progreso de boletos
   function actualizarProgreso() {
     let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
     let totalVendidos = 0;
     registros.forEach(r => totalVendidos += r.boletos.length);
 
-    let porcentaje = Math.min(Math.round((totalVendidos / TOTAL_BOLETOS_RIFA) * 100), 100);
+    let porcentaje = Math.min(Math.round((totalVendidos / META_ESTIMADA_BOLETOS) * 100), 100);
 
     document.getElementById('boletos-jugados').innerText = totalVendidos;
-    document.getElementById('boletos-totales').innerText = TOTAL_BOLETOS_RIFA;
     document.getElementById('porcentaje-texto').innerText = porcentaje + '%';
     document.getElementById('progress-bar-fill').style.width = porcentaje + '%';
 
-    // Si llega al 95% o más, se muestra la barra de urgencia con el timer
     if (porcentaje >= 95) {
       document.getElementById('urgency-bar').style.display = 'block';
     } else {
@@ -685,10 +681,11 @@
     }
   }
 
-  function generarNumeros5Digitos(cantidad) {
+  // Genera combinaciones únicas de 5 dígitos para Pick 4 de Florida (ej: 0042, 9812)
+  function generarNumerosPick4(cantidad) {
     let numeros = [];
     while(numeros.length < cantidad) {
-      let num = Math.floor(10000 + Math.random() * 90000).toString();
+      let num = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
       if(!numeros.includes(num)) {
         numeros.push(num);
       }
@@ -734,7 +731,7 @@
           <div style="border-bottom: 1px solid #1f293d; padding-bottom: 10px; margin-bottom: 10px;">
             <p>👤 <strong>Cliente:</strong> ${item.nombre}</p>
             <p>📱 <strong>WhatsApp:</strong> ${item.telefono}</p>
-            <p>🎟️ <strong>Boletos:</strong> <span style="color: var(--accent-gold); font-weight: bold;">${item.boletos.join(', ')}</span></p>
+            <p>🎟️ <strong>Boletos Pick 4:</strong> <span style="color: var(--accent-gold); font-weight: bold;">${item.boletos.join(', ')}</span></p>
             <p>🏛️ <strong>Banco:</strong> ${item.banco.toUpperCase()}</p>
             <span class="status-badge status-pending">⏳ ${item.estado}</span>
           </div>
@@ -744,7 +741,6 @@
     }
   }
 
-  // Timer regresivo
   let timeLeft = 600;
   setInterval(() => {
     if(timeLeft > 0) {
@@ -755,7 +751,6 @@
     }
   }, 1000);
 
-  // Inicializar al cargar la página
   actualizarProgreso();
 
   document.getElementById('raffleForm').addEventListener('submit', function(e) {
@@ -767,7 +762,7 @@
     const telefono = document.getElementById('telefono').value;
     const banco = document.getElementById('banco').value;
 
-    const boletosGenerados = generarNumeros5Digitos(cantidad);
+    const boletosGenerados = generarNumerosPick4(cantidad);
     guardarRegistro(nombre, telefono, boletosGenerados, banco);
 
     document.getElementById('generated-tickets').innerText = boletosGenerados.join(' - ');
