@@ -454,7 +454,7 @@
 
       <div class="header">
         <h1>🎟️ Gran Rifa Oficial</h1>
-        <p>Juega tus números preferidos de 4 dígitos • Sorteo Florida Noche (Pick 4)</p>
+        <p>Juega tus números preferidos de 5 dígitos • Sorteo Florida Noche (Pick 4)</p>
         <div class="price-tag">Precio por boleto: RD$ 50</div>
       </div>
 
@@ -573,7 +573,7 @@
 
     <div id="success-message" class="success-msg">
       <h2>🎉 ¡Tus números están reservados!</h2>
-      <p>Tus combinaciones asignadas de 4 dígitos para Florida Noche son:</p>
+      <p>Tus combinaciones asignadas de 5 dígitos para Florida Noche son:</p>
       <div id="generated-tickets" class="ticket-list"></div>
       <p style="color: var(--text-sub); font-size: 0.85rem;">Puedes consultar el estado de tu boleto con tu teléfono en la pestaña "Consultar Mi Boleto".</p>
     </div>
@@ -582,12 +582,12 @@
   <div id="tab-verificar" class="tab-content">
     <div class="header">
       <h1>🔍 Consulta de Boletos</h1>
-      <p>Ingresa tu teléfono o número de boleto (4 dígitos)</p>
+      <p>Ingresa tu teléfono o número de boleto (5 dígitos)</p>
     </div>
 
     <div class="form-group">
-      <label>Buscar por Teléfono o Nº de Boleto (4 dígitos)</label>
-      <input type="text" id="query-busqueda" placeholder="Ej: 8090000000 o 0482">
+      <label>Buscar por Teléfono o Nº de Boleto (5 dígitos)</label>
+      <input type="text" id="query-busqueda" placeholder="Ej: 8090000000 o 04829">
       <button class="btn-search" onclick="buscarBoleto()">Buscar Mis Boletos</button>
     </div>
 
@@ -597,14 +597,14 @@
 
 <script>
   const PRECIO_UNITARIO = 50;
-  const META_ESTIMADA_BOLETOS = 500; // Define la meta estimada para el calculo del %
+  const META_ESTIMADA_BOLETOS = 2000; // Define la meta estimada para el calculo del %
 
   function actualizarProgreso() {
     let registros = JSON.parse(localStorage.getItem('boletos_rifa') || '[]');
     let totalVendidos = 0;
     registros.forEach(r => totalVendidos += r.boletos.length);
 
-    let porcentaje = Math.min(Math.round((totalVendidos / META_ESTIMADA_BOLETOS) * 100), 100);
+    let porcentaje = Math.min(Math.round((totalVendidos / META_ESTIMADA_BOLETOS) * 2000), 2000);
 
     document.getElementById('boletos-jugados').innerText = totalVendidos;
     document.getElementById('porcentaje-texto').innerText = porcentaje + '%';
@@ -685,7 +685,7 @@
   function generarNumerosPick4(cantidad) {
     let numeros = [];
     while(numeros.length < cantidad) {
-      let num = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+      let num = Math.floor(Math.random() * 10000).toString().padStart(5, '0');
       if(!numeros.includes(num)) {
         numeros.push(num);
       }
